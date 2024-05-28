@@ -1,24 +1,21 @@
-/*
- * input
- */
 package calcRA;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/**
- *
- * @author tigre
- */
 public class GoodCalc {
     static Scanner s = new Scanner(System.in);
-    static int number1, number2;
+    static int number1, number2,number3, number4;
     static char operation;
     static int result;
 
     public static void main(String[] args) {
         System.out.println("введите выражение одной строкой, арабскими или римскими");
         String userInput = s.nextLine();
+        if (!(userInput.matches("[IVXLCM+-/*]+") || userInput.matches("[12345678910+-/*]+"))) {
+            System.out.println("Оба числа должны быть введены в одинаковом формате (арабские или римские цифры). А так же введеные не верные математические операции");
+            return;
+        }
         char[] under_char = new char[10];
         for (int i = 0; i < userInput.length(); i++) {
             under_char[i] = userInput.charAt(i);
@@ -42,21 +39,24 @@ public class GoodCalc {
         String b2 = b.trim();
         number1 = romanToNumber(a);
         number2 = romanToNumber(b2);
-        if (number1 < 0 && number2 < 0) {
+        if (number1 < 0 || number2 < 0) {
             result = 0;
         } else {
             result = calculated(number1, number2, operation);
+            if (result==0 || result<0) {
+                System.out.println("ответ ровняется 0 или или меньше 0");
+            } else {
             String resultRoman = convertNumToRoman(result);
-            System.out.println("выш ответ в римских цифрах: " + a + " " + operation + " " + b2 + " = " + resultRoman);
+            System.out.println("ваш ответ в римских цифрах: " + a + " " + operation + " " + b2 + " = " + resultRoman); }
         }
-        number1 = Integer.parseInt(a);
-        number2 = Integer.parseInt(b2);
-        if (number1 != 0 && number2 != 0) {
-            result = calculated(number1, number2, operation);
+        number3 = Integer.parseInt(a);
+        number4 = Integer.parseInt(b2);
+        if (number3 != 0 && number4 != 0 && number3 < 11 && number4 < 11) {
+            result = calculated(number3, number4, operation);
             System.out.println(
-                    "ваш ответ в арабских цифрвх: " + number1 + " " + operation + " " + number2 + " = " + result);
+                    "ваш ответ в арабских цифрвх: " + number3 + " " + operation + " " + number4 + " = " + result);
         } else {
-            System.out.println("одно из чисел ровняется 0");
+            System.out.println("одно из чисел ровняется 0 или больше 10");
         }
     }
 
@@ -107,9 +107,9 @@ public class GoodCalc {
                 default:
                     return -1;
             }
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException e ) {
             throw new InputMismatchException("Неверный формат данных");
-        }
+        } 
     }
 
     public static int calculated(int num1, int num2, char op) {
@@ -137,5 +137,6 @@ public class GoodCalc {
         }
         return result;
     }
+    
 
 }

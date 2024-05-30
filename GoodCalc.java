@@ -7,14 +7,15 @@ public class GoodCalc {
     static Scanner s = new Scanner(System.in);
     static int number1, number2,number3, number4;
     static char operation;
-    static int result;
+    static int result1;
+    static int result2;
 
     public static void main(String[] args) {
         System.out.println("введите выражение одной строкой, арабскими или римскими");
         String userInput = s.nextLine();
-        if (!(userInput.matches("[IVXLCM+-/*]+") || userInput.matches("[12345678910+-/*]+"))) {
-            System.out.println("Оба числа должны быть введены в одинаковом формате (арабские или римские цифры). А так же введеные не верные математические операции");
-            return;
+        if (!(userInput.matches("[IVXLCM+-/* ]+") || userInput.matches("[12345678910+-/* ]+"))) {
+            throw new ArithmeticException("Оба числа должны быть введены в одинаковом формате (арабские или римские цифры). А так же введеные не верные математические операции");
+
         }
         char[] under_char = new char[10];
         for (int i = 0; i < userInput.length(); i++) {
@@ -39,25 +40,34 @@ public class GoodCalc {
         String b2 = b.trim();
         number1 = romanToNumber(a);
         number2 = romanToNumber(b2);
-        if (number1 < 0 || number2 < 0) {
-            result = 0;
+        if (number1 < 0 && number2 < 0) {
+            number3 = Integer.parseInt(a);
+            number4 = Integer.parseInt(b2);
+            result2 = calculated(number3, number4, operation);
         } else {
-            result = calculated(number1, number2, operation);
-            if (result==0 || result<0) {
-                System.out.println("ответ ровняется 0 или или меньше 0");
+            result1 = calculated(number1, number2, operation);
+        }
+        
+        if (result1==-1000 || result2==-1000 ) {
+            
+        } else {
+            
+            if (number1 < 0 && number2 < 0) {
+                System.out.println("ваш ответ в арабских цифрвх: " + number3 + " " + operation + " " + number4 + " = " + result2);
             } else {
-            String resultRoman = convertNumToRoman(result);
-            System.out.println("ваш ответ в римских цифрах: " + a + " " + operation + " " + b2 + " = " + resultRoman); }
+                if (result1==0) {
+                    throw new ArithmeticException("ответ в римских цифрах не может ровняться 0");
+                } else {
+                    String resultRoman = convertNumToRoman(result1);
+                    System.out.println("ваш ответ в римских цифрах: " + a + " " + operation + " " + b2 + " = " + resultRoman);
+                }
+            }
         }
-        number3 = Integer.parseInt(a);
-        number4 = Integer.parseInt(b2);
-        if (number3 != 0 && number4 != 0 && number3 < 11 && number4 < 11) {
-            result = calculated(number3, number4, operation);
-            System.out.println(
-                    "ваш ответ в арабских цифрвх: " + number3 + " " + operation + " " + number4 + " = " + result);
-        } else {
-            System.out.println("одно из чисел ровняется 0 или больше 10");
-        }
+        
+        
+            
+            
+        
     }
 
     private static String convertNumToRoman(int numArabian) {
@@ -72,8 +82,8 @@ public class GoodCalc {
                 "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC",
                 "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII", "XCVIII", "XCIX", "C"
         };
-        final String s = roman[numArabian];
-        return s;
+        final String sc = roman[numArabian];
+        return sc;
     }
 
     /**
@@ -113,30 +123,40 @@ public class GoodCalc {
     }
 
     public static int calculated(int num1, int num2, char op) {
-        int result = 0;
+        int result=-1000;
         switch (op) {
-            case '+':
-                result = num1 + num2;
-                break;
-            case '-':
-                result = num1 - num2;
-                break;
-            case '*':
-                result = num1 * num2;
-                break;
-            case '/':
-                try {
-                    result = num1 / num2;
-                } catch (ArithmeticException | InputMismatchException e) {
-                    System.out.println("исключение : " + e);
-                    System.out.println("Разрешены только целые ненулевые параметры");
-                    break;
-                }
-            default:
-                throw new IllegalArgumentException("Не верный знак операции");
+        case '+':
+            if (num1 != 0 && num2 != 0) {
+            result = num1 + num2;
+            } else {
+            throw new ArithmeticException("Нельзя нельзя использовать ноль при вводе");
+            }
+        break;
+        case '-':
+            if (num1 != 0 &&num2 != 0) {
+            result = num1 - num2;
+            } else {
+            throw new ArithmeticException("Нельзя нельзя использовать ноль при вводе");
+            }
+        break;
+        case '*':
+            if (num1 != 0 && num2 != 0) {
+            result = num1 * num2;
+            } else {
+            throw new ArithmeticException("Нельзя нельзя использовать ноль при вводе");
+            }
+        break;
+        case '/':
+            if (num1 != 0 && num2 != 0) {
+                result = num1 / num2;
+            } else {
+            throw new ArithmeticException("Нельзя делить числа с 0");
+            }
+            break;
+        default:
+            throw new IllegalArgumentException("Не верный знак операции");
         }
         return result;
-    }
-    
+       }
 
 }

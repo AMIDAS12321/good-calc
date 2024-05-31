@@ -141,10 +141,13 @@ public class GoodCalc {
         if (number1 < 0 && number2 < 0) {
             number3 = Integer.parseInt(a);
             number4 = Integer.parseInt(b2);
-            if (number3 < 0 || number4 < 0 && number3 > 10 || number4 > 10) {
-                throw new ArithmeticException("вы ввели больше 10 или меньше 0");
+            if (number3 > 10 || number4 > 10) {
+                throw new ArithmeticException("вы ввели больше 10");
+            } else if ( number3== 0 || number4 == 0) {
+                throw new ArithmeticException("вы ввели меньше 1");
+            } else {
+                result1 = calculated(number3, number4, operation);;
             }
-            result1 = calculated(number3, number4, operation);
         } else {
             if (number1 > 10 || number2 > 10) {
                 throw new ArithmeticException("вы ввели больше X");

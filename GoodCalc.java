@@ -17,7 +17,7 @@ public class GoodCalc {
     static int result2;
 
     enum RomanNumeral {
-    I(1), IV(4), V(5), IX(9), X(10), 
+    O(0), I(1), IV(4), V(5), IX(9), X(10), 
     XL(40), L(50), XC(90), C(100), 
     CD(400), D(500), CM(900), M(1000);
 
@@ -45,9 +45,8 @@ public class GoodCalc {
         String userInput = userInput2.replaceAll(" ", "");
         
         
-        if (!(userInput.matches("[IVXLCM+-/* ]+") || userInput.matches("[12345678910+-/* ]+"))) {
+        if (!(userInput.matches("[OIVXLCM+-/* ]+") || userInput.matches("[12345678910+-/* ]+"))) {
             throw new ArithmeticException("Оба числа должны быть введены в одинаковом формате (арабские или римские цифры). А так же введеные не верные математические операции");
-
         }
         char[] under_char = new char[100];
         for (int i = 0; i < userInput.length(); i++) {
@@ -138,9 +137,7 @@ public class GoodCalc {
         String b2 = b.trim();
         number1 = romanToArabic(a);
         number2 = romanToArabic(b2);
-        if (number1 > 10 || number2 > 10) {
-            throw new ArithmeticException("вы ввели больше X или меньше 1");
-        }
+        
         if (number1 < 0 && number2 < 0) {
             number3 = Integer.parseInt(a);
             number4 = Integer.parseInt(b2);
@@ -149,7 +146,13 @@ public class GoodCalc {
             }
             result1 = calculated(number3, number4, operation);
         } else {
-            result1 = calculated(number1, number2, operation);
+            if (number1 > 10 || number2 > 10) {
+                throw new ArithmeticException("вы ввели больше X");
+            } else if ( number1== 0 || number2 == 0) {
+                throw new ArithmeticException("вы ввели меньше I");
+            } else {
+                result1 = calculated(number1, number2, operation);
+            }
         }
         
         if (result1==-1000 || result2==-1000 ) {
